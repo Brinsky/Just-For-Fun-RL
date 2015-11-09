@@ -13,6 +13,8 @@ monster_t* alloc_monster(char symbol, int x, int y, int hp)
 
 	monster->next = NULL;
 	monster->prev = NULL;
+
+	return monster;
 }
 
 void attempt_move(monster_t* monster, level_t* level, player_t* player, int x, int y)
