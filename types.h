@@ -3,6 +3,10 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+#define LOG_LINE_LEN		80
+#define LOG_MAX_LINES		10
+#define LOG_BUFFER_SIZE 	(LOG_MAX_LINES * LOG_LINE_LEN)
+
 typedef struct player_t
 {
 	char symbol;
@@ -22,6 +26,14 @@ typedef struct monster_t
 	struct monster_t* next;
 	struct monster_t* prev;
 } monster_t;
+
+typedef struct log_t
+{
+	int pos; // Last character position 
+	int line; // Line currently being viewed
+	int length; // Total # of lines
+	char buffer[LOG_BUFFER_SIZE];
+} log_t;
 
 typedef struct level_t
 {

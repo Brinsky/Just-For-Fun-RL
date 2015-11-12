@@ -7,48 +7,6 @@
 
 #define PLAYER_CHAR '@'
 
-#define LOG_MAX_LINES	10
-#define LOG_LINE_LEN	80
-#define LOG_BUFFER_SIZE	(LOG_MAX_LINES * LOG_LINE_LEN)
-
-#define MSG_MORE	"(more)"
-#define MSG_CUTOFF	"(trunc.)"
-
-static char log[LOG_BUFFER_SIZE];
-static int log_pos = 0;
-static int log_line = 0;
-static int log_total_lines = 0;
-
-void write_log(char* msg)
-{
-	int length = strlen(msg);
-
-	// Ensure space for the message plus a ' '
-	if (length + log_pos + 1 > LOG_BUFFER_SIZE)
-		length = LOG_BUFFER_SIZE - log_pos - 1;
-
-	// If we had enough room to write a space and at least some of the message
-	if (length > 0) {
-		// Message
-		strncpy(&log[log_pos], msg, length);
-		log_pos += length;
-
-		// Trailing space
-		log[log_pos] = ' ';
-		log_pos++;
-
-		// Update # of lines
-		log_total_lines = 1 + (log_pos - 1) / LOG_LINE_LEN;
-	}
-}
-
-void clear_log()
-{
-	log_pos = 0;
-	log_line = 0;
-	log_total_lines = 0;
-}
-
 void draw(level_t* level, player_t* player)
 {
 	erase();
@@ -58,12 +16,15 @@ void draw(level_t* level, player_t* player)
 	for (i = 0; i < level->width; ++i) {
 		for (j = 0; j < level->height; ++j) {
 			if (level->mon_map[i][j])
-				mvwaddch(stdscr, level->height - j - 1, i, level->mon_map[i][j]->symbol | COLOR_PAIR(2));
+				mvwaddch(stdscr, level->height - j - 1, i,
+						level->mon_map[i][j]->symbol | COLOR_PAIR(2));
 			else
-				mvwaddch(stdscr, level->height - j - 1, i, level->terrain[i][j]);
+				mvwaddch(stdscr, level->height - j - 1,
+						i, level->terrain[i][j]);
 		}
 	}
-	mvwaddch(stdscr, level->height - player->y - 1, player->x, player->symbol | COLOR_PAIR(1));
+	mvwaddch(stdscr, level->height - player->y - 1,
+			player->x, player->symbol | COLOR_PAIR(1));
 
 	// Draw status info
 	char status[LOG_LINE_LEN];
@@ -71,16 +32,17 @@ void draw(level_t* level, player_t* player)
 	mvwaddstr(stdscr, level->height + 1, 0, status);
 
 	// Draw log messages
-	if (log_pos > 0) {
+	if (turn_log.pos > 0) {
 		int stop;
 
-		if (log_line == log_total_lines - 1)
-			stop = log_pos % LOG_LINE_LEN;
+		if (turn_log.line == turn_log.length - 1)
+			stop = turn_log.pos % LOG_LINE_LEN;
 		else
 			stop = LOG_LINE_LEN;
 
 		for (int i = 0; i < stop; ++i)
-			mvwaddch(stdscr, level->height, i, log[log_line * LOG_LINE_LEN + i]);
+			mvwaddch(stdscr, level->height, i,
+					turn_log.buffer[turn_log.line * LOG_LINE_LEN + i]);
 	}
 
 	refresh();
@@ -127,6 +89,9 @@ int main()
 	// Initialize player
 	player_t player = init_player(PLAYER_CHAR, 1, 1, 20);
 
+	// Initialize log
+	init_log();
+
 	bool running = TRUE;
 	bool dead = FALSE;
 	int input = 0;
@@ -140,8 +105,8 @@ int main()
 				running = FALSE;
 
 			// Cycle through log lines
-			if (input == ' ' && log_line < log_total_lines - 1)
-				log_line++;
+			if (input == ' ' && turn_log.line < turn_log.length - 1)
+				turn_log.line++;
 		
 			// Movement/action inputs
 			int x = 0, y = 0;	

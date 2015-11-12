@@ -1,2 +1,4 @@
 A disorganized and directionless roguelike. This project is just for kicks -
 anyone is welcome to contribute.
+
+Requires curses and stdbool support.

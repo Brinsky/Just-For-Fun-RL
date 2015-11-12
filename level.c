@@ -87,3 +87,10 @@ void rm_monster(level_t* level, monster_t* monster)
 
 	free(monster);
 }
+
+/* Checks if a position can be moved into by an actor */
+bool is_open(level_t* level, int x, int y)
+{
+	return x >= 0 && x < level->width && y >= 0 && y < level->height
+		&& level->terrain[x][y] == '.' && level->mon_map[x][y] == NULL;
+}

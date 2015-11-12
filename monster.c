@@ -17,19 +17,6 @@ monster_t* alloc_monster(char symbol, int x, int y, int hp)
 	return monster;
 }
 
-void attempt_move(monster_t* monster, level_t* level, player_t* player, int x, int y)
-{
-	if (x >= 0 && x < level->width && y >= 0 && y < level->height
-			&& level->terrain[x][y] == '.'
-			&& level->mon_map[x][y] == NULL
-			&& !(x == player->x && y == player->y)) {
-		level->mon_map[monster->x][monster->y] = NULL;
-		monster->x = x;
-		monster->y = y;
-		level->mon_map[x][y] = monster;	
-	}
-}
-
 /* Process a monster's turn */
 void monster_turn(monster_t* monster, level_t* level, player_t* player)
 {
@@ -53,7 +40,13 @@ void monster_turn(monster_t* monster, level_t* level, player_t* player)
 		else if (distY < 0)
 			y = 1;
 
-		attempt_move(monster, level, player, monster->x + x, monster->y + y);
+		// Move towards the player if possible
+		if (is_open(level, monster->x + x, monster->y + y)) {
+			level->mon_map[monster->x][monster->y] = NULL;
+			monster->x += x;
+			monster->y += y;
+			level->mon_map[monster->x][monster->y] = monster;
+		}
 	}
 }
 
