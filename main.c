@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include <string.h>
+#include <time.h>
 
 #include "types.h"
 #include "externs.h"
@@ -18,6 +19,41 @@ static char log[LOG_BUFFER_SIZE];
 static int log_pos = 0;
 static int log_line = 0;
 static int log_total_lines = 0;
+
+void clearInput()
+{   
+	//clears the input buffer 
+	while (getchar() != '\n');
+}
+
+char select_difficulty()
+{
+	char temp;
+	int notValid = 1;
+
+	//Prompts user to pick a difficulty for the game
+	while(notValid == 1)
+	{
+		temp = 0;
+		printf("\n\n\nb - beginner, i - intermediate, a - advanced\n");
+		printf("Please enter a difficulty ('b', 'i', or 'a'): ");
+
+		//Reads in user input
+		scanf("%c", &temp);
+
+		//makes sure they enteres a valid value
+		if(temp == 'b' || temp == 'B' || temp == 'i' || temp == 'I' || temp == 'a' || temp == 'A')
+			notValid = 0;
+		else
+		{	
+			printf("\nInvalid selection, please try again.");
+			clearInput();
+		}
+	}
+	printf("\n");
+	clearInput();
+	return temp;
+}
 
 void write_log(char* msg)
 {
@@ -100,6 +136,8 @@ void monster_turns(level_t* level, player_t* player)
 
 int main()
 {
+	char difficulty = select_difficulty();
+
 	// ncurses setup
 	initscr();
 	cbreak();
@@ -115,6 +153,7 @@ int main()
 
 	// Initialize level
 	level_t level = init_level(15, 15);
+	level.diff = difficulty;
 
 	// Insert dummy monsters
 	add_monster(&level, alloc_monster('M', 9, 9, 10));

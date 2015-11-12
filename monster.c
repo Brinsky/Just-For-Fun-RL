@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <time.h>
 
 #include "externs.h"
 #include "types.h"
@@ -35,10 +36,20 @@ void monster_turn(monster_t* monster, level_t* level, player_t* player)
 {
 	int distX = monster->x - player->x;
 	int distY = monster->y - player->y;
+	char diff = level->diff;
 
-	// Attack the player if close enough
+	// Attack the player if close enough based on difficulty
 	if (distX >= -1 && distX <= 1 && distY >= -1 && distY <= 1) {
-		player->hp--;
+		if(diff == 'b')
+			player->hp--;
+		else if (diff == 'i')
+			player->hp -= 2;
+		else if (diff == 'a')
+		{
+			srand(time(NULL));
+
+			player->hp -= rand() % 4;
+		}
 		write_log("The monster hits you.");
 	} else { // Otherwise move towards them
 		int x = 0;
@@ -60,7 +71,26 @@ void monster_turn(monster_t* monster, level_t* level, player_t* player)
 /* Process a player v. monster attack */
 void hit_monster(monster_t* monster, level_t* level, player_t* player)
 {
-	monster->hp -= 5;
+	char diff = level->diff;
+
+	if(diff == 'b')
+		monster->hp -= 5;
+	else if (diff == 'i')
+		monster->hp -= 5;
+	else if (diff == 'a')
+	{
+		srand(time(NULL));
+		int num = rand();
+
+		monster->hp -= num % 10;
+
+		//chance for a critical hit which heavily damages monster and restores 1 player hp
+		if(num > 8)
+		{
+			player->hp += 1;
+			write_log("Critical hit!");
+		}
+	}
 
 	if (monster->hp <= 0) {
 		rm_monster(level, monster);
