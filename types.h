@@ -27,6 +27,7 @@ typedef struct level_t
 {
 	int width;
 	int height;
+	char diff;
 	char** terrain; // 2D array of chars
 	monster_t*** mon_map; // 2D array of monster_t*
 	monster_t* mon_list; // List of all living monsters

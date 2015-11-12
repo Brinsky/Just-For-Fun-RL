@@ -1,5 +1,7 @@
 #include "types.h"
 #include "externs.h"
+#include <stdlib.h>
+#include <time.h>
 
 player_t init_player(char symbol, int x, int y, int max_hp)
 {
