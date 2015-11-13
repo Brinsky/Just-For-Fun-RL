@@ -36,14 +36,6 @@ typedef struct monster_t
 	struct monster_t* prev;
 } monster_t;
 
-typedef struct log_t
-{
-	int pos; // Last character position 
-	int line; // Line currently being viewed
-	int length; // Total # of lines
-	char buffer[LOG_BUFFER_SIZE];
-} log_t;
-
 typedef struct level_t
 {
 	int width;

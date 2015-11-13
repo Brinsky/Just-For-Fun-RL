@@ -5,17 +5,16 @@
 #ifndef EXTERNS_H
 #define EXTERNS_H
 
-#define TMP_STR_LEN		100
-
-char tmp_str[TMP_STR_LEN];
-
-extern log_t turn_log;
-
 /* Log-related functions */
-void init_log();
 void writef_log(char*, ...);
 void write_log(char*);
 void clear_log();
+void log_next_line();
+void log_prev_line();
+int log_pos();
+int log_line();
+int log_total_lines();
+char log_at(int);
 
 /* Level-related functions */
 level_t init_level(int, int);

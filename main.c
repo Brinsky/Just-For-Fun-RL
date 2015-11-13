@@ -33,23 +33,23 @@ void draw(level_t* level, player_t* player)
 	mvaddstr(level->height + 1, 0, status);
 
 	// Draw log messages
-	if (turn_log.pos > 0) {
+	if (log_pos() > 0) {
 		int stop;
 
-		if (turn_log.line == turn_log.length - 1) {
-			stop = turn_log.pos % LOG_LINE_LEN;
+		if (log_line() == log_total_lines() - 1) {
+			stop = log_pos() % LOG_LINE_LEN;
 		} else {
 			stop = LOG_LINE_LEN;
 
 			// Let the player know if text is truncated
-			if (turn_log.buffer[stop - 1] != '.')
+			if (log_at(stop - 1) != '.')
 				mvaddch(level->height, LOG_LINE_LEN, '.');
 			mvprintw(level->height, LOG_LINE_LEN + 1, ".. (more)");
 		}
 
 		for (int i = 0; i < stop; ++i)
 			mvaddch(level->height, i,
-					turn_log.buffer[turn_log.line * LOG_LINE_LEN + i]);
+					log_at(log_line() * LOG_LINE_LEN + i));
 	}
 
 	refresh();
@@ -98,9 +98,6 @@ int main()
 	// Initialize player
 	player_t player = init_player(PLAYER_CHAR, 1, 1, 20);
 
-	// Initialize log
-	init_log();
-
 	bool running = TRUE;
 	bool dead = FALSE;
 	int input = 0;
@@ -114,8 +111,8 @@ int main()
 				running = FALSE;
 
 			// Cycle through log lines
-			if (input == ' ' && turn_log.line < turn_log.length - 1)
-				turn_log.line++;
+			if (input == ' ')
+				log_next_line();
 		
 			// Movement/action inputs
 			int x = 0, y = 0;	
