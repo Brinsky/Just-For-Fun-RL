@@ -17,32 +17,38 @@ void draw(level_t* level, player_t* player)
 	for (i = 0; i < level->width; ++i) {
 		for (j = 0; j < level->height; ++j) {
 			if (level->mon_map[i][j])
-				mvwaddch(stdscr, level->height - j - 1, i,
+				mvaddch(level->height - j - 1, i,
 						level->mon_map[i][j]->symbol | COLOR_PAIR(2));
 			else
-				mvwaddch(stdscr, level->height - j - 1,
-						i, level->terrain[i][j]);
+				mvaddch(level->height - j - 1, i,
+						level->terrain[i][j]);
 		}
 	}
-	mvwaddch(stdscr, level->height - player->y - 1,
+	mvaddch(level->height - player->y - 1,
 			player->x, player->symbol | COLOR_PAIR(1));
 
 	// Draw status info
 	char status[LOG_LINE_LEN];
 	snprintf(status, LOG_LINE_LEN, "HP: %d/%d", player->stats.cur_hp, player->stats.max_hp);
-	mvwaddstr(stdscr, level->height + 1, 0, status);
+	mvaddstr(level->height + 1, 0, status);
 
 	// Draw log messages
 	if (turn_log.pos > 0) {
 		int stop;
 
-		if (turn_log.line == turn_log.length - 1)
+		if (turn_log.line == turn_log.length - 1) {
 			stop = turn_log.pos % LOG_LINE_LEN;
-		else
+		} else {
 			stop = LOG_LINE_LEN;
 
+			// Let the player know if text is truncated
+			if (turn_log.buffer[stop - 1] != '.')
+				mvaddch(level->height, LOG_LINE_LEN, '.');
+			mvprintw(level->height, LOG_LINE_LEN + 1, ".. (more)");
+		}
+
 		for (int i = 0; i < stop; ++i)
-			mvwaddch(stdscr, level->height, i,
+			mvaddch(level->height, i,
 					turn_log.buffer[turn_log.line * LOG_LINE_LEN + i]);
 	}
 

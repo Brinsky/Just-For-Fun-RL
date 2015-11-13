@@ -1,3 +1,5 @@
+#include <stdarg.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "types.h"
@@ -10,27 +12,33 @@ void init_log()
 	clear_log(turn_log);
 }
 
-void write_log(char* msg)
+void writef_log(char* format, ...)
 {
-	int length = strlen(msg);
+	// Deal with variable argument list
+	va_list ap;
+	va_start(ap, format);
 
-	// Ensure space for the message plus a ' '
-	if (length + turn_log.pos + 1 > LOG_BUFFER_SIZE)
-		length = LOG_BUFFER_SIZE - turn_log.pos - 1;
+	// Write out as much as we have room for (or just the whole message)
+	int remaining_space = LOG_BUFFER_SIZE - turn_log.pos;
+	turn_log.pos += vsnprintf(&turn_log.buffer[turn_log.pos],
+			remaining_space, format, ap);
 
-	// If we had enough room to write a space and at least some of the message
-	if (length > 0) {
-		// Message
-		strncpy(&turn_log.buffer[turn_log.pos], msg, length);
-		turn_log.pos += length;
-
-		// Trailing space
+	// Insert trailing space
+	if (turn_log.pos < LOG_BUFFER_SIZE) {
 		turn_log.buffer[turn_log.pos] = ' ';
 		turn_log.pos++;
-
-		// Update # of lines
-		turn_log.length = 1 + (turn_log.pos - 1) / LOG_LINE_LEN;
 	}
+
+	// Update # of lines
+	turn_log.length = 1 + (turn_log.pos - 1) / LOG_LINE_LEN;
+	
+	// Cleanup
+	va_end(ap);
+}
+
+void write_log(char* msg)
+{
+	writef_log(msg);
 }
 
 void clear_log()

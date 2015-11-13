@@ -13,6 +13,7 @@ extern log_t turn_log;
 
 /* Log-related functions */
 void init_log();
+void writef_log(char*, ...);
 void write_log(char*);
 void clear_log();
 
