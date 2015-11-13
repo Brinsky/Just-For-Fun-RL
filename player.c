@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "types.h"
 #include "externs.h"
 
@@ -8,8 +10,7 @@ player_t init_player(char symbol, int x, int y, int max_hp)
 	player.symbol = symbol;
 	player.x = x;
 	player.y = y;
-	player.max_hp = max_hp;
-	player.hp = max_hp;	
+	player.stats = init_stats(max_hp, max_hp, 12, 12, 12, 12);
 
 	return player;
 }

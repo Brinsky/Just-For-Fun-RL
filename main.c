@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include <string.h>
+#include <time.h>
 
 #include "types.h"
 #include "externs.h"
@@ -28,7 +29,7 @@ void draw(level_t* level, player_t* player)
 
 	// Draw status info
 	char status[LOG_LINE_LEN];
-	snprintf(status, LOG_LINE_LEN, "HP: %d/%d", player->hp, player->max_hp);
+	snprintf(status, LOG_LINE_LEN, "HP: %d/%d", player->stats.cur_hp, player->stats.max_hp);
 	mvwaddstr(stdscr, level->height + 1, 0, status);
 
 	// Draw log messages
@@ -62,6 +63,8 @@ void monster_turns(level_t* level, player_t* player)
 
 int main()
 {
+	srand(time(NULL));
+
 	// ncurses setup
 	initscr();
 	cbreak();
@@ -83,8 +86,8 @@ int main()
 	add_monster(&level, alloc_monster('M', 7, 9, 10));
 	add_monster(&level, alloc_monster('M', 9, 7, 10));
 	add_monster(&level, alloc_monster('M', 3, 5, 10));
-	add_monster(&level, alloc_monster('M', 7, 2, 10));
-	add_monster(&level, alloc_monster('M', 9, 11, 10));
+	//add_monster(&level, alloc_monster('M', 7, 2, 10));
+	//add_monster(&level, alloc_monster('M', 9, 11, 10));
 
 	// Initialize player
 	player_t player = init_player(PLAYER_CHAR, 1, 1, 20);
@@ -141,7 +144,7 @@ int main()
 
 			draw(&level, &player);
 
-			if (player.hp <= 0)
+			if (player.stats.cur_hp <= 0)
 				dead = TRUE;
 		}
 	}

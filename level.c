@@ -10,23 +10,21 @@ level_t init_level(int width, int height)
 	level.width = width;
 	level.height = height;
 
-	int i, j;
-
 	// Allocate/initialize terrain matrix */
 	level.terrain = malloc(sizeof(char*) * height);
 	char* terrainData = calloc(sizeof(char), width * height);
-	for (i = 0; i < height; ++i)
+	for (int i = 0; i < height; ++i)
 		level.terrain[i] = &terrainData[i * width];
 
 	// Allocate/initialize entity matrix
 	level.mon_map = malloc(sizeof(monster_t**) * height);
 	monster_t** monsterData = calloc(sizeof(monster_t*), width * height);
-	for (i = 0; i < height; ++i)
+	for (int i = 0; i < height; ++i)
 		level.mon_map[i] = &monsterData[i * width];
 
 	// Build terrain
-	for (i = 0; i < width; ++i) {
-		for (j = 0; j < height; ++j) {
+	for (int i = 0; i < width; ++i) {
+		for (int j = 0; j < height; ++j) {
 			if (i > 0 && i < width - 1 && j > 0 && j < height - 1)
 				level.terrain[i][j] = '.';
 			else

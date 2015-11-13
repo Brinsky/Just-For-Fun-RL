@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "externs.h"
@@ -9,7 +10,7 @@ monster_t* alloc_monster(char symbol, int x, int y, int hp)
 	monster->symbol = symbol;
 	monster->x = x;
 	monster->y = y;
-	monster->hp = hp;
+	monster->stats = init_stats(hp, hp, 10, 10, 10, 10);
 
 	monster->next = NULL;
 	monster->prev = NULL;
@@ -25,8 +26,13 @@ void monster_turn(monster_t* monster, level_t* level, player_t* player)
 
 	// Attack the player if close enough
 	if (distX >= -1 && distX <= 1 && distY >= -1 && distY <= 1) {
-		player->hp--;
-		write_log("The monster hits you.");
+		int dmg = attack(&player->stats, &monster->stats);
+		if (dmg >= 0) {
+			snprintf(tmp_str, TMP_STR_LEN, "Monster hits you for %d damage.", dmg);
+			write_log(tmp_str);
+		} else {
+			write_log("Monster misses you.");
+		}
 	} else { // Otherwise move towards them
 		int x = 0;
 		if (distX > 0)
@@ -53,12 +59,20 @@ void monster_turn(monster_t* monster, level_t* level, player_t* player)
 /* Process a player v. monster attack */
 void hit_monster(monster_t* monster, level_t* level, player_t* player)
 {
-	monster->hp -= 5;
+	int dmg = attack(&monster->stats, &player->stats);
 
-	if (monster->hp <= 0) {
+	if (dmg > 0) {
+		snprintf(tmp_str, TMP_STR_LEN, "You hit monster for %d damage.", dmg);
+		write_log(tmp_str);
+	} else {
+		write_log("You miss the monster.");
+	}
+
+	if (monster->stats.cur_hp <= 0) {
 		rm_monster(level, monster);
 		write_log("You kill the monster.");
-	} else {
-		write_log("You strike the monster.");
 	}
+
+	snprintf(tmp_str, TMP_STR_LEN, "(Monster HP: %d)", monster->stats.cur_hp);
+	write_log(tmp_str);
 }
