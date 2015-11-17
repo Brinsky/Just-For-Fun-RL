@@ -1,0 +1,75 @@
+TRACKING ENTITIES WITHIN A LEVEL
+
+An "entity" in this context is any distinct object which can exist in the game
+world. Some examples include monsters, items, doors, and traps. Tracking the
+state and behavior of each entity in the level is a critical part of the game.
+
+Although C does not directly support object-oriented constructs, it is helpful
+to establish the following "class" heirarchy for our entities:
+
+
+                                           +-- Monster
+                    +-- Creature <---------|
+                    |                      +-- Player
+                    |
+                    |
+                    |                      +-- Door
+                    |                      |
+                    +-- Mechanism <--------+-- Trap
+                    |                      |
+                    |                      +-- Chest
+          Entity <--|
+                    |
+                    |
+                    +-- Item
+                    |
+                    |
+                    |
+                    |                      +-- Wall
+                    |                      |
+                    +-- Terrain Feature <--+-- Floor
+                                           |
+                                           +-- Staircase 
+
+
+("Entity" is the parent of every other class in this diagram)
+
+The middle layer of the heirarchy (Creatures, Mechanisms, Items) encompasses
+some important differences to consider when storing/updating entities within
+the level:
+
+CREATURES
+Creatures take turns and cannot stand on top of one another. They can stand on
+top of Items and certain kinds of Mechanisms.
+
+MECHANISMS
+Mechanisms cannot be placed on top of one another, and are variably solid to
+Creatures and Items (closed doors and chests are solid while open doors and
+floor-based traps are not).
+
+ITEMS
+Items can be stacked ad infinitum and do not block players or traps (except
+for closed doors).
+
+TERRAIN FEATURES
+Terrain Features are static level elements which require no special state or
+behavior. For our purposes, they can be entirely represented by single ASCII
+characters.
+
+To track all of these entities within a given level, two data structures are
+created. The first is a two-dimensional array of chars representing the
+Terrain Features at any given location in the level. The second is
+two-dimensional array of stacks of Entities representing all Entities at a
+given location.
+
+The entity stack is organized in the following way:
+
+    Creature   (zero or one, must be first in the stack if present)
+    Mechanism  (zero or one, must come after any Creature and before any Items)
+    Item
+    Item       (zero or more)
+    Item
+    ...
+
+Creatures may also be tracked in an additional data structure to keep track of
+turn ordering.
