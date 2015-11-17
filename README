@@ -1,4 +1,21 @@
 A disorganized and directionless roguelike. This project is just for kicks -
 anyone is welcome to contribute.
 
-Requires curses and stdbool support.
+Built using GCC and ncurses. It can probably be made to run with different
+compilers and curses implementations, but it hasn't yet.
+
+-- LINUX / MAC --
+
+With the ncurses library and headers installed (and GCC, of course), running
+`make` should build the game.
+
+-- BUILDING ON WINDOWS --
+
+It might be possible to build the game with a Windows-compatible curses port
+(like PDCurses), but the easiest way is through Cygwin. A Cygwin environment
+with the following extra packages should be suitable for compiling/developing
+the game: gcc-core, libncurses-devel, libncursesw10, git.
+
+After Cygwin and the above packages are installed, simply open the Cygwin
+terminal, navigate to the game's source directory (or create it with `git
+clone`) and run `make`.
