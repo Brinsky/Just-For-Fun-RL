@@ -1,6 +1,7 @@
 #include <stdlib.h>
 
-#include "externs.h"
+#include "level.h"
+#include "monster.h"
 
 /* Prepares the arrays and values backing the level */
 level_t init_level(int width, int height)

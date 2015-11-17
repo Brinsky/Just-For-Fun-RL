@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include "types.h"
-#include "externs.h"
+#include "player.h"
+#include "monster.h"
 
 player_t init_player(char symbol, int x, int y, int max_hp)
 {

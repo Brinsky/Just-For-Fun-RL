@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "externs.h"
-#include "types.h"
+#include "monster.h"
+#include "log.h"
 
 monster_t* alloc_monster(char symbol, int x, int y, int hp)
 {

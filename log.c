@@ -2,8 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "types.h"
-#include "externs.h"
+#include "log.h"
 
 static int pos = 0; // Next open character position
 static int line = 0; // Line currently being viewed

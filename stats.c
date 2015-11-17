@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "types.h"
+#include "stats.h"
 
 stats_t init_stats(int cur_hp, int max_hp, int attack, int defense, int accuracy, int evasion)
 {

@@ -3,8 +3,10 @@
 #include <string.h>
 #include <time.h>
 
-#include "types.h"
-#include "externs.h"
+#include "level.h"
+#include "monster.h"
+#include "player.h"
+#include "log.h"
 
 #define PLAYER_CHAR '@'
 
