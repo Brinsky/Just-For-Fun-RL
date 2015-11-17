@@ -4,9 +4,9 @@
 #include "monster.h"
 #include "log.h"
 
-monster_t* alloc_monster(char symbol, int x, int y, int hp)
+Monster* alloc_monster(char symbol, int x, int y, int hp)
 {
-	monster_t* monster = malloc(sizeof(monster_t));
+	Monster* monster = malloc(sizeof(Monster));
 	monster->symbol = symbol;
 	monster->x = x;
 	monster->y = y;
@@ -19,7 +19,7 @@ monster_t* alloc_monster(char symbol, int x, int y, int hp)
 }
 
 /* Process a monster's turn */
-void monster_turn(monster_t* monster, level_t* level, player_t* player)
+void monster_turn(Monster* monster, Level* level, Player* player)
 {
 	int distX = monster->x - player->x;
 	int distY = monster->y - player->y;
@@ -55,7 +55,7 @@ void monster_turn(monster_t* monster, level_t* level, player_t* player)
 }
 
 /* Process a player v. monster attack */
-void hit_monster(monster_t* monster, level_t* level, player_t* player)
+void hit_monster(Monster* monster, Level* level, Player* player)
 {
 	int dmg = attack(&monster->stats, &player->stats);
 

@@ -10,7 +10,7 @@
 
 #define PLAYER_CHAR '@'
 
-void draw(level_t* level, player_t* player)
+void draw(Level* level, Player* player)
 {
 	erase();
 
@@ -58,9 +58,9 @@ void draw(level_t* level, player_t* player)
 }
 
 /* Process each monster's turn */
-void monster_turns(level_t* level, player_t* player)
+void monster_turns(Level* level, Player* player)
 {
-	monster_t* current = level->mon_list;
+	Monster* current = level->mon_list;
 	while (current) {
 		monster_turn(current, level, player);
 
@@ -87,7 +87,7 @@ int main()
 	init_pair(2, COLOR_GREEN, COLOR_BLACK);
 
 	// Initialize level
-	level_t level = init_level(15, 15);
+	Level level = init_level(15, 15);
 
 	// Insert dummy monsters
 	add_monster(&level, alloc_monster('M', 9, 9, 10));
@@ -98,7 +98,7 @@ int main()
 	//add_monster(&level, alloc_monster('M', 9, 11, 10));
 
 	// Initialize player
-	player_t player = init_player(PLAYER_CHAR, 1, 1, 20);
+	Player player = init_player(PLAYER_CHAR, 1, 1, 20);
 
 	bool running = TRUE;
 	bool dead = FALSE;

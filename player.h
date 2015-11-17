@@ -4,15 +4,15 @@
 #include "level.h"
 #include "stats.h"
 
-typedef struct player_t
+typedef struct Player
 {
 	char symbol;
-	stats_t stats;
+	Stats stats;
 	int x;
 	int y;
-} player_t;
+} Player;
 
-player_t init_player(char, int, int, int);
-void attempt_act(level_t*, player_t*, int, int);
+Player init_player(char, int, int, int);
+void attempt_act(Level*, Player*, int, int);
 
 #endif

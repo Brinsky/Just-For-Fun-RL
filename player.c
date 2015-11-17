@@ -3,9 +3,9 @@
 #include "player.h"
 #include "monster.h"
 
-player_t init_player(char symbol, int x, int y, int max_hp)
+Player init_player(char symbol, int x, int y, int max_hp)
 {
-	player_t player;
+	Player player;
 
 	player.symbol = symbol;
 	player.x = x;
@@ -16,7 +16,7 @@ player_t init_player(char symbol, int x, int y, int max_hp)
 }
 
 /* Attempt to attack or move in a given direction, depending on context */
-void attempt_act(level_t* level, player_t* player, int deltaX, int deltaY)
+void attempt_act(Level* level, Player* player, int deltaX, int deltaY)
 {
 	int newX = player->x + deltaX;
 	int newY = player->y + deltaY;

@@ -5,21 +5,21 @@
 #include "stats.h"
 
 // Forward declaration to avoid circular dependency
-typedef struct player_t player_t;
+typedef struct Player Player;
 
-typedef struct monster_t
+typedef struct Monster
 {
 	char symbol;
-	stats_t stats;
+	Stats stats;
 	int x;
 	int y;
 	// Used to build linked list of all monsters in a level
-	struct monster_t* next;
-	struct monster_t* prev;
-} monster_t;
+	struct Monster* next;
+	struct Monster* prev;
+} Monster;
 
-monster_t* alloc_monster(char, int, int, int);
-void monster_turn(monster_t*, level_t*, player_t*);
-void hit_monster(monster_t*, level_t*, player_t*);
+Monster* alloc_monster(char, int, int, int);
+void monster_turn(Monster*, Level*, Player*);
+void hit_monster(Monster*, Level*, Player*);
 
 #endif

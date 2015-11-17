@@ -2,24 +2,31 @@
 #define LEVEL_H
 
 #include <stdbool.h>
+#include "entity.h"
 
 // Forward declaration to avoid circular dependency
-typedef struct monster_t monster_t;
+typedef struct Monster Monster;
 
-typedef struct level_t
+typedef struct Level
 {
-	int width;
-	int height;
+	const int width;
+	const int height;
 	char** terrain; // 2D array of chars
-	monster_t*** mon_map; // 2D array of monster_t*
-	monster_t* mon_list; // List of all living monsters
-} level_t;
+	Entity*** entity_map;
+	Monster*** mon_map; // 2D array of Monster*
+	Monster* mon_list; // List of all living monsters
+} Level;
 
-/* Level-related functions */
-level_t init_level(int, int);
-void cleanup_level(level_t*);
-void add_monster(level_t*, monster_t*);
-void rm_monster(level_t*, monster_t*);
-bool is_open(level_t*, int, int);
+Level init_level(int, int);
+void cleanup_level(Level*);
+void add_monster(Level*, Monster*);
+void rm_monster(Level*, Monster*);
+bool is_open(Level*, int, int);
+
+bool is_open(Level*, int, int);
+
+bool has_creature(Level*, int, int);
+bool has_mechanism(Level*, int, int);
+bool has_item(Level*, int, int);
 
 #endif

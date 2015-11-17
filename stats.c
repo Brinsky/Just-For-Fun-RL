@@ -2,9 +2,9 @@
 
 #include "stats.h"
 
-stats_t init_stats(int cur_hp, int max_hp, int attack, int defense, int accuracy, int evasion)
+Stats init_stats(int cur_hp, int max_hp, int attack, int defense, int accuracy, int evasion)
 {
-	stats_t stats;
+	Stats stats;
 
 	stats.cur_hp = cur_hp;
 	stats.max_hp = max_hp;
@@ -23,7 +23,7 @@ int rand_between(int low, int high)
 }
 
 /* Returns amount of damage dealt. Value is negative for missed attacks */
-int attack(stats_t* defender, stats_t* attacker)
+int attack(Stats* defender, Stats* attacker)
 {
 	int eva_roll = defender->evasion + rand_between(-4, 1);
 	int acc_roll = attacker->accuracy + rand_between(-1, 6);

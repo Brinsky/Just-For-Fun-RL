@@ -1,7 +1,7 @@
 #ifndef STATS_H
 #define STATS_H
 
-typedef struct stats_t
+typedef struct Stats
 {
 	int cur_hp;
 	int max_hp;
@@ -9,9 +9,9 @@ typedef struct stats_t
 	int defense;
 	int accuracy;
 	int evasion;
-} stats_t;
+} Stats;
 
-stats_t init_stats(int, int, int, int, int, int);
-int attack(stats_t*, stats_t*);
+Stats init_stats(int, int, int, int, int, int);
+int attack(Stats*, Stats*);
 
 #endif
